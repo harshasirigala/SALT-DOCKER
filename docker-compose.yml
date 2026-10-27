@@ -1,0 +1,33 @@
+services:
+  salt-master:
+    build: { context: ., dockerfile: Dockerfile.master }
+    container_name: salt-master
+    hostname: salt-master
+    volumes:
+      - ./srv/salt:/srv/salt
+
+  ubuntu-minion:
+    build:
+      context: .
+      dockerfile: Dockerfile.minion
+      args: { BASE_IMAGE: "jrei/systemd-ubuntu:22.04" }
+    container_name: ubuntu-minion
+    hostname: ubuntu-minion
+    privileged: true
+    cgroup: host
+    volumes: ["/sys/fs/cgroup:/sys/fs/cgroup:rw"]
+    tmpfs: [/tmp, /run, /run/lock]
+    depends_on: [salt-master]
+
+  debian-minion:
+    build:
+      context: .
+      dockerfile: Dockerfile.minion
+      args: { BASE_IMAGE: "jrei/systemd-debian:12" }
+    container_name: debian-minion
+    hostname: debian-minion
+    privileged: true
+    cgroup: host
+    volumes: ["/sys/fs/cgroup:/sys/fs/cgroup:rw"]
+    tmpfs: [/tmp, /run, /run/lock]
+    depends_on: [salt-master]

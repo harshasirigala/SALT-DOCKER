@@ -1,0 +1,4 @@
+srv/salt/hello/files/hello-svc
+*.pem
+*key
+.env

@@ -1,0 +1,11 @@
+[Unit]
+Description=Hello service deployed by Salt
+After=network.target
+
+[Service]
+EnvironmentFile=/etc/default/hello-svc
+ExecStart=/usr/local/bin/hello-svc
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

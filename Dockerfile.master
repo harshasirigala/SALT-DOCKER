@@ -1,0 +1,6 @@
+FROM ubuntu:22.04
+RUN apt-get update && apt-get install -y curl ca-certificates gnupg procps && rm -rf /var/lib/apt/lists/*
+RUN curl -fsSL https://github.com/saltstack/salt-bootstrap/releases/latest/download/bootstrap-salt.sh -o /tmp/bootstrap-salt.sh \
+ && sh /tmp/bootstrap-salt.sh -M -N -X -d stable
+EXPOSE 4505 4506
+CMD ["salt-master", "-l", "info"]
