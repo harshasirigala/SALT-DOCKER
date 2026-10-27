@@ -5,6 +5,7 @@ services:
     hostname: salt-master
     volumes:
       - ./srv/salt:/srv/salt
+      - ./srv/pillar:/srv/pillar
 
   ubuntu-minion:
     build:
@@ -15,7 +16,11 @@ services:
     hostname: ubuntu-minion
     privileged: true
     cgroup: host
-    volumes: ["/sys/fs/cgroup:/sys/fs/cgroup:rw"]
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - ./data/ubuntu-snapshots:/snapshots:ro
+    ports:
+      - "8081:8080"
     tmpfs: [/tmp, /run, /run/lock]
     depends_on: [salt-master]
 
@@ -28,6 +33,10 @@ services:
     hostname: debian-minion
     privileged: true
     cgroup: host
-    volumes: ["/sys/fs/cgroup:/sys/fs/cgroup:rw"]
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+      - ./data/debian-snapshots:/snapshots:ro
+    ports:
+      - "8082:8080"
     tmpfs: [/tmp, /run, /run/lock]
     depends_on: [salt-master]

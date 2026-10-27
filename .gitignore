@@ -1,4 +1,6 @@
 srv/salt/hello/files/hello-svc
 *.pem
-*key
+*.key
 .env
+data/
+srv/pillar/secrets/*.sls
