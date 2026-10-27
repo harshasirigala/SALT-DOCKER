@@ -1,0 +1,12 @@
+server {
+    listen 8080;
+    server_name _;
+
+    location /snapshots/ {
+        if ($http_x_snapshot_token != "{{ pillar['snapshots']['token'] }}") {
+            return 403;
+        }
+        alias /snapshots/;
+        autoindex on;
+    }
+}
